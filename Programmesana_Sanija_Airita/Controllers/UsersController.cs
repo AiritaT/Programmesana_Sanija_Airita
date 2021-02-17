@@ -19,7 +19,10 @@ namespace Programmesana_Sanija_Airita.Controllers
         {
             return View(db.Users.ToList());
         }
-
+        public ActionResult Registration()
+        {
+            return View();
+        }
         // GET: Users/Details/5
         public ActionResult Details(string id)
         {
