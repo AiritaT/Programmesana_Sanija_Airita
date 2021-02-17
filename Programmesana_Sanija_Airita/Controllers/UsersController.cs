@@ -6,7 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Programmesana_Sanija_Airita.Controllers.DataAccess;
 using Programmesana_Sanija_Airita.Models;
+using System.IO;
+using System.Web.Security;
 
 namespace Programmesana_Sanija_Airita.Controllers
 {
@@ -17,114 +20,126 @@ namespace Programmesana_Sanija_Airita.Controllers
         // GET: Users
         public ActionResult Index()
         {
-            return View(db.Users.ToList());
+            return View();
         }
+        [HttpGet]
         public ActionResult Registration()
         {
             return View();
         }
-        // GET: Users/Details/5
-        public ActionResult Details(string id)
+        [HttpPost]
+        public ActionResult Register(User u, string ConfirmPassword)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            User user = db.Users.Find(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-            return View(user);
-        }
+            try {
 
-        // GET: Users/Create
-        public ActionResult Create()
+                if (ModelState.IsValid)
+                {
+                    if (ConfirmPassword == u.Password)
+                    {
+                        UsersRepository ur = new UsersRepository();
+
+                        if (ur.DoesUsernameExist(u.Username) == true)
+                        {
+                            ViewBag.Error = "Username already exist.";
+                        }
+                        else
+                        {
+                            u.Password = u.Password;
+                            ur.AddUser(u);
+                            Role defaultrole = ur.GetDefaultRole();
+                            ur.AllocateRoleToUser(u, defaultrole);
+
+                            ViewBag.Message = "Registration successful";
+                            ModelState.Clear();
+                        }
+
+                    }
+                    else
+                    {
+                        ViewBag.Error = "password do not match";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Registartion Failed";
+            }
+            return View(u);
+        }
+        [HttpGet]
+        public ActionResult Login()
         {
             return View();
         }
-
-        // POST: Users/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Username,Name,Surname,Password,Email,Blocked,Active")] User user)
+        public ActionResult Login (string username, string password)
         {
-            if (ModelState.IsValid)
-            {
-                db.Users.Add(user);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
 
-            return View(user);
+            UsersRepository ur = new UsersRepository();
+            User trylogin = ur.GetUserByUsername(username);
+
+            if(trylogin.Blocked == true)
+            {
+
+                ViewBag.Error = "Your account is blocked. Contact Administrator";
+            }
+            else
+            {
+                if (ur.Login(username, password) == true)
+                {
+                    System.Web.Security.FormsAuthentication.SetAuthCookie(username, true);
+                    return RedirectToAction("Files", "Files");
+                }
+                else
+                {
+                    ViewBag.Error = "Login failed";
+                }
+            }
+            return View();
         }
-
-        // GET: Users/Edit/5
-        public ActionResult Edit(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            User user = db.Users.Find(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-            return View(user);
-        }
-
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Username,Name,Surname,Password,Email,Blocked,Active")] User user)
+        public ActionResult Logout()
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(user);
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login");
         }
 
-        // GET: Users/Delete/5
-        public ActionResult Delete(string id)
+        public ActionResult List()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            User user = db.Users.Find(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-            return View(user);
+            UsersRepository ur = new UsersRepository();
+            var listOfUser = ur.GetUsers();
+            return View(listOfUser);
         }
-
-        // POST: Users/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult Edit(string username)
         {
-            User user = db.Users.Find(id);
-            db.Users.Remove(user);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            using (ProgrammesanaEntities dc = new ProgrammesanaEntities())
             {
-                db.Dispose();
+                return View(dc.Users.Where(x => x.Username == username).FirstOrDefault());
             }
-            base.Dispose(disposing);
+        }
+        [HttpPost]
+        public ActionResult Edit(User u)
+        {
+            try
+            {
+                using (ProgrammesanaEntities dc = new ProgrammesanaEntities())
+                {
+                    var myUser = dc.Users.SingleOrDefault(x => x.Username == u.Username);
+
+                    myUser.Blocked = u.Blocked;
+                    dc.SaveChanges();
+
+                }
+                return RedirectToAction("List");
+            }
+            catch
+            {
+                return View();
+            }
         }
     }
 }

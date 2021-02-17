@@ -2,136 +2,146 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Programmesana_Sanija_Airita.Controllers.DataAccess;
 using Programmesana_Sanija_Airita.Models;
+using File = Programmesana_Sanija_Airita.Models.File;
 
 namespace Programmesana_Sanija_Airita.Controllers
 {
     public class FilesController : Controller
     {
-        private ProgrammesanaEntities db = new ProgrammesanaEntities();
-
-        // GET: Files
-        public ActionResult Index()
+        public ActionResult Files()
         {
-            var files = db.Files.Include(f => f.Category).Include(f => f.User);
-            return View(files.ToList());
-        }
+            FilesRepository fr = new FilesRepository();
+            var listOfFiles = fr.GetFiles();
 
-        // GET: Files/Details/5
-        public ActionResult Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            File file = db.Files.Find(id);
-            if (file == null)
-            {
-                return HttpNotFound();
-            }
-            return View(file);
+            return View(listOfFiles);
         }
-
-        // GET: Files/Create
+        [HttpGet]
         public ActionResult Create()
         {
-            ViewBag.Categories_id = new SelectList(db.Categories, "id", "Name");
-            ViewBag.User_id = new SelectList(db.Users, "Username", "Name");
             return View();
         }
-
-        // POST: Files/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        public ActionResult Create(File data)
+        {
+            string actionName = this.ControllerContext.RouteData.Values["action"].ToString();
+            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    FilesRepository fr = new FilesRepository();
+                    UsersRepository ur = new UsersRepository();
+                    var FileCreater = ur.GetUserByUsername(User.Identity.Name);
+
+                    data.User_id = FileCreater.Username;
+                    fr.AddFiles(data);
+
+
+                    //new LogsRepository().Log(User.Identity.Name, controllerName + "\\" + actionName, "Post" + data.Id + "added", LogType.Information);
+                    ViewBag.Message = "Item added successfully";
+
+                    return RedirectToAction("Files", new { id = data.id });
+                }
+                else
+                {
+                    ViewBag.Error = "Check your inputs";
+                }
+            }
+            catch (Exception ex)
+            {
+                //new LogsRepository().Log(User.Identity.Name, controllerName + "\\" + actionName, ex, LogType.Error);
+                ViewBag.Error = "Item failed to be added";
+            }
+
+            return View();
+        }
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,Title,Description,Date,Share,Categories_id,User_id")] File file)
+        [Authorize]
+        public ActionResult Search(string keyword)
         {
-            if (ModelState.IsValid)
-            {
-                file.id = Guid.NewGuid();
-                db.Files.Add(file);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            FilesRepository ir = new FilesRepository();
+            var filteredList = ir.GetFiles().Where(File => File.Title.Contains(keyword));
 
-            ViewBag.Categories_id = new SelectList(db.Categories, "id", "Name", file.Categories_id);
-            ViewBag.User_id = new SelectList(db.Users, "Username", "Name", file.User_id);
-            return View(file);
+            return View("Files", filteredList);
+            //metids list and search
         }
-
-        // GET: Files/Edit/5
-        public ActionResult Edit(Guid? id)
+        public ActionResult Delete(Guid id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            File file = db.Files.Find(id);
-            if (file == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.Categories_id = new SelectList(db.Categories, "id", "Name", file.Categories_id);
-            ViewBag.User_id = new SelectList(db.Users, "Username", "Name", file.User_id);
-            return View(file);
-        }
+            FilesRepository fr = new FilesRepository();
 
-        // POST: Files/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+            var file = fr.GetFiles().SingleOrDefault(x => x.id == id);
+            if (file != null)
+                fr.DeleteFile(file);
+            //pr.DeletePhoto();
+
+            TempData["Message"] = "Post deleted successfully";
+            return RedirectToAction("Files");
+        }
+        [HttpGet]
+        public ActionResult Upload(Guid id)
+        {
+            //shows the page
+            FilesRepository fr = new FilesRepository();
+            var file = fr.GetFiles().SingleOrDefault(x => x.id == id);
+            return View(file);
+
+        }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,Title,Description,Date,Share,Categories_id,User_id")] File file)
+        [Authorize]
+        public ActionResult Upload(Guid id, HttpPostedFileBase file)
         {
-            if (ModelState.IsValid)
+            FilesRepository fr = new FilesRepository();
+            if (file != null)
             {
-                db.Entry(file).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    //generates images random name
+                    string newFilename = Guid.NewGuid() + System.IO.Path.GetExtension(file.FileName);
+                    //storing image in concret place
+                    string absolutePath = Server.MapPath("\\Files") + "\\" + newFilename;
+
+                    //make public key location
+
+                    MemoryStream fileData = new MemoryStream();
+                    file.InputStream.CopyTo(fileData);
+
+
+                    //uploading images in database
+                    Upload u = new Upload();
+                    u.File_id = id;
+                    u.Path = newFilename;
+                    fr.AddUpload(u);
+                    ViewBag.Message = "File is uploaded successfully";
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Error = "File was not uploaded";
+                }
+                var fails = fr.GetFiles().SingleOrDefault(x => x.id == id);
+                return View(fails);
             }
-            ViewBag.Categories_id = new SelectList(db.Categories, "id", "Name", file.Categories_id);
-            ViewBag.User_id = new SelectList(db.Users, "Username", "Name", file.User_id);
-            return View(file);
+            else
+            {
+                return RedirectToAction("Subscription", "Users");
+            }
+        }
+        [Authorize]
+        //[ValidateAntiForgeryToken]
+        public ActionResult Download(string id)
+        {
+
+            var FilePath ="\\Files" + "\\" + id;
+            return File(FilePath , "application/force-download", System.IO.Path.GetFileName(FilePath));
+
         }
 
-        // GET: Files/Delete/5
-        public ActionResult Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            File file = db.Files.Find(id);
-            if (file == null)
-            {
-                return HttpNotFound();
-            }
-            return View(file);
-        }
-
-        // POST: Files/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
-        {
-            File file = db.Files.Find(id);
-            db.Files.Remove(file);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
+   
 }
