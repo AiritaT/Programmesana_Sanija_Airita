@@ -23,9 +23,9 @@ namespace Programmesana_Sanija_Airita.Models
         public System.Guid id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public System.DateTime Date { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
         public string Share { get; set; }
-        public System.Guid Categories_id { get; set; }
+        public Nullable<System.Guid> Categories_id { get; set; }
         public string User_id { get; set; }
     
         public virtual Category Category { get; set; }

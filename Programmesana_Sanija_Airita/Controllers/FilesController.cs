@@ -19,15 +19,17 @@ namespace Programmesana_Sanija_Airita.Controllers
         {
             FilesRepository fr = new FilesRepository();
             var listOfFiles = fr.GetFiles();
-
             return View(listOfFiles);
         }
         [HttpGet]
+        [Authorize]
         public ActionResult Create()
         {
             return View();
         }
         [HttpPost]
+        [ValidateInput(false)]
+        [Authorize]
         public ActionResult Create(File data)
         {
             string actionName = this.ControllerContext.RouteData.Values["action"].ToString();
@@ -79,9 +81,8 @@ namespace Programmesana_Sanija_Airita.Controllers
             var file = fr.GetFiles().SingleOrDefault(x => x.id == id);
             if (file != null)
                 fr.DeleteFile(file);
-            //pr.DeletePhoto();
 
-            TempData["Message"] = "Post deleted successfully";
+            TempData["Message"] = "Deleted successfully";
             return RedirectToAction("Files");
         }
         [HttpGet]
@@ -94,54 +95,53 @@ namespace Programmesana_Sanija_Airita.Controllers
 
         }
         [HttpPost]
-        [Authorize]
-        public ActionResult Upload(Guid id, HttpPostedFileBase file)
+        public ActionResult Upload(Guid id , HttpPostedFileBase file)
         {
             FilesRepository fr = new FilesRepository();
             if (file != null)
             {
-                try
-                {
-                    //generates images random name
-                    string newFilename = Guid.NewGuid() + System.IO.Path.GetExtension(file.FileName);
-                    //storing image in concret place
-                    string absolutePath = Server.MapPath("\\Files") + "\\" + newFilename;
-
-                    //make public key location
-
-                    MemoryStream fileData = new MemoryStream();
-                    file.InputStream.CopyTo(fileData);
 
 
-                    //uploading images in database
-                    Upload u = new Upload();
-                    u.File_id = id;
-                    u.Path = newFilename;
-                    fr.AddUpload(u);
-                    ViewBag.Message = "File is uploaded successfully";
-                }
-                catch (Exception ex)
-                {
-                    ViewBag.Error = "File was not uploaded";
-                }
-                var fails = fr.GetFiles().SingleOrDefault(x => x.id == id);
-                return View(fails);
+                //string Path = Server.MapPath("//FileStorage") + "//" + newFilename;
+                string name = Path.GetFileName(file.FileName);
+                string path = Path.Combine(Server.MapPath("~/FileStorage") +"//"+ name );
+                file.SaveAs(path);
+                ViewBag.Message = "File uploaded";
+                Upload u = new Upload();
+                u.File_id = id;
+                u.Path = name;
+                fr.AddUpload(u);
+                ViewBag.Message = "File is uploaded successfully";
             }
-            else
-            {
-                return RedirectToAction("Subscription", "Users");
-            }
+
+            var fails = fr.GetFiles().SingleOrDefault(x => x.id == id);
+            return View(fails);
+
         }
-        [Authorize]
+        
         //[ValidateAntiForgeryToken]
         public ActionResult Download(string id)
         {
 
-            var FilePath ="\\Files" + "\\" + id;
-            return File(FilePath , "application/force-download", System.IO.Path.GetFileName(FilePath));
+            var FilePath = "~/FileStorage/" + id;
+            return File(FilePath , "application/force-stream", System.IO.Path.GetFileName(FilePath));
 
         }
-
+        public ActionResult Details(Guid id)
+        {
+            try
+            {
+                FilesRepository ir = new FilesRepository();
+                //encryption.decryptquerystring
+                var myItem = ir.GetFiles().SingleOrDefault(x => x.id == id);
+                return View(myItem);
+            }
+            catch
+            {
+                TempData["error"] = "Value is not valid";
+                return RedirectToAction("List");
+            }
+        }
     }
    
 }

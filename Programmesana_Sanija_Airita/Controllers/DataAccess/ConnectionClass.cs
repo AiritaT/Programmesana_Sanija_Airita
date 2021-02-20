@@ -7,10 +7,10 @@ namespace Programmesana_Sanija_Airita.Controllers.DataAccess
 {
     public class ConnectionClass
     {
-        public ProgrammesanaEntities Entity { get; set; }
+        public ProgrammesanaEntities1 Entity { get; set; }
         public ConnectionClass()
         {
-            Entity = new ProgrammesanaEntities();
+            Entity = new ProgrammesanaEntities1();
         }
     }
 }

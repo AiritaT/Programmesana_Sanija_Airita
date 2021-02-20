@@ -19,9 +19,9 @@
           <Property Name="id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Title" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Date" Type="date" />
           <Property Name="Share" Type="varchar" MaxLength="500" />
-          <Property Name="Categories_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Categories_id" Type="uniqueidentifier" />
           <Property Name="User_id" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Roles">
@@ -46,7 +46,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Path" Type="text" Nullable="false" />
           <Property Name="File_id" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
@@ -68,10 +68,10 @@
           <Property Name="Password" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Blocked" Type="bit" Nullable="false" />
-          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="Active" Type="bit" />
         </EntityType>
         <Association Name="FK_Files_Categories">
-          <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
           <End Role="Files" Type="Self.Files" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Categories">
@@ -179,9 +179,9 @@
           <Property Name="id" Type="Guid" Nullable="false" />
           <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
           <Property Name="Share" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="Categories_id" Type="Guid" Nullable="false" />
+          <Property Name="Categories_id" Type="Guid" />
           <Property Name="User_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Category" Relationship="Self.FK_Files_Categories" FromRole="Files" ToRole="Categories" />
           <NavigationProperty Name="User" Relationship="Self.FK_Files_Users" FromRole="Files" ToRole="Users" />
@@ -210,7 +210,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Path" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="File_id" Type="Guid" Nullable="false" />
           <NavigationProperty Name="File" Relationship="Self.FK_Uploads_Files" FromRole="Uploads" ToRole="Files" />
@@ -225,12 +225,12 @@
           <Property Name="Password" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Blocked" Type="Boolean" Nullable="false" />
-          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="Active" Type="Boolean" />
           <NavigationProperty Name="Files" Relationship="Self.FK_Files_Users" FromRole="Users" ToRole="Files" />
           <NavigationProperty Name="Roles" Relationship="Self.UserRoles" FromRole="Users" ToRole="Roles" />
         </EntityType>
         <Association Name="FK_Files_Categories">
-          <End Role="Categories" Type="Self.Category" Multiplicity="1" />
+          <End Role="Categories" Type="Self.Category" Multiplicity="0..1" />
           <End Role="Files" Type="Self.File" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Categories">
@@ -269,7 +269,7 @@
           <End Role="Roles" Type="Self.Role" Multiplicity="*" />
           <End Role="Users" Type="Self.User" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="ProgrammesanaEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="ProgrammesanaEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="Files" EntityType="Self.File" />
           <EntitySet Name="Roles" EntityType="Self.Role" />
@@ -298,7 +298,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ProgrammesanaModelStoreContainer" CdmEntityContainer="ProgrammesanaEntities">
+        <EntityContainerMapping StorageEntityContainer="ProgrammesanaModelStoreContainer" CdmEntityContainer="ProgrammesanaEntities1">
           <EntitySetMapping Name="Categories">
             <EntityTypeMapping TypeName="ProgrammesanaModel.Category">
               <MappingFragment StoreEntitySet="Categories">

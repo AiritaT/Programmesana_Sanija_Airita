@@ -43,5 +43,6 @@ namespace Programmesana_Sanija_Airita.Controllers.DataAccess
             Entity.Uploads.Remove(u);
             Entity.SaveChanges();
         }
+       
     }
 }

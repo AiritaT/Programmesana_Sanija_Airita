@@ -7,6 +7,12 @@ namespace Programmesana_Sanija_Airita.Controllers.DataAccess
 {
     public class UsersRepository : ConnectionClass
     {
+
+        public UsersRepository() : base()
+        {
+
+        }
+
         public void AddUser(User u)
         {
             Entity.Users.Add(u);
@@ -19,7 +25,7 @@ namespace Programmesana_Sanija_Airita.Controllers.DataAccess
         }
         public User GetUserByUsername(string username)
         {
-            return Entity.Users.SingleOrDefault(X => X.Username == username);
+            return Entity.Users.SingleOrDefault(x => x.Username == username);
         }
         public bool DoesUsernameExist(string username)
         {
@@ -49,7 +55,7 @@ namespace Programmesana_Sanija_Airita.Controllers.DataAccess
         }*/
         public Role GetDefaultRole()
         {
-            return Entity.Roles.SingleOrDefault(x => x.DefaultRole==true);
+            return Entity.Roles.SingleOrDefault(x => x.DefaultRole == true);
         }
     }
   

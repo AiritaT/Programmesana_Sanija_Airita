@@ -15,21 +15,16 @@ namespace Programmesana_Sanija_Airita.Controllers
 {
     public class UsersController : Controller
     {
-        private ProgrammesanaEntities db = new ProgrammesanaEntities();
-
-        // GET: Users
-        public ActionResult Index()
-        {
-            return View();
-        }
+      
         [HttpGet]
         public ActionResult Registration()
         {
             return View();
         }
         [HttpPost]
-        public ActionResult Register(User u, string ConfirmPassword)
-        {
+        [ValidateAntiForgeryToken]
+        public ActionResult Registration(User u, string ConfirmPassword)
+        { 
             try {
 
                 if (ModelState.IsValid)
@@ -37,22 +32,20 @@ namespace Programmesana_Sanija_Airita.Controllers
                     if (ConfirmPassword == u.Password)
                     {
                         UsersRepository ur = new UsersRepository();
-
                         if (ur.DoesUsernameExist(u.Username) == true)
                         {
-                            ViewBag.Error = "Username already exist.";
+                            ModelState.AddModelError("UsernameExist", "Username already exist");
+                            return View(u);
                         }
-                        else
-                        {
-                            u.Password = u.Password;
+                        
+                           // u.Password = u.Password;
                             ur.AddUser(u);
                             Role defaultrole = ur.GetDefaultRole();
                             ur.AllocateRoleToUser(u, defaultrole);
 
+                           
                             ViewBag.Message = "Registration successful";
                             ModelState.Clear();
-                        }
-
                     }
                     else
                     {
@@ -62,9 +55,9 @@ namespace Programmesana_Sanija_Airita.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Registartion Failed";
+                ViewBag.Error = "Registration failed!";
             }
-            return View(u);
+            return View();
         }
         [HttpGet]
         public ActionResult Login()
@@ -75,7 +68,6 @@ namespace Programmesana_Sanija_Airita.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login (string username, string password)
         {
-
             UsersRepository ur = new UsersRepository();
             User trylogin = ur.GetUserByUsername(username);
 
@@ -88,7 +80,7 @@ namespace Programmesana_Sanija_Airita.Controllers
             {
                 if (ur.Login(username, password) == true)
                 {
-                    System.Web.Security.FormsAuthentication.SetAuthCookie(username, true);
+                    //System.Web.Security.FormsAuthentication.SetAuthCookie(username, true);
                     return RedirectToAction("Files", "Files");
                 }
                 else
@@ -98,8 +90,9 @@ namespace Programmesana_Sanija_Airita.Controllers
             }
             return View();
         }
-        [Authorize]
+       
         [HttpPost]
+        [Authorize]
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
@@ -116,7 +109,7 @@ namespace Programmesana_Sanija_Airita.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Edit(string username)
         {
-            using (ProgrammesanaEntities dc = new ProgrammesanaEntities())
+            using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
             {
                 return View(dc.Users.Where(x => x.Username == username).FirstOrDefault());
             }
@@ -126,7 +119,7 @@ namespace Programmesana_Sanija_Airita.Controllers
         {
             try
             {
-                using (ProgrammesanaEntities dc = new ProgrammesanaEntities())
+                using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
                 {
                     var myUser = dc.Users.SingleOrDefault(x => x.Username == u.Username);
 
@@ -141,5 +134,6 @@ namespace Programmesana_Sanija_Airita.Controllers
                 return View();
             }
         }
+        
     }
 }

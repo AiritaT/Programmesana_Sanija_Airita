@@ -13,10 +13,10 @@ namespace Programmesana_Sanija_Airita.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ProgrammesanaEntities : DbContext
+    public partial class ProgrammesanaEntities1 : DbContext
     {
-        public ProgrammesanaEntities()
-            : base("name=ProgrammesanaEntities")
+        public ProgrammesanaEntities1()
+            : base("name=ProgrammesanaEntities1")
         {
         }
     
