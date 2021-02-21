@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "login";
+}
+
+<div class="jumbotron jumbotron-fluid" style="background:rgb(255, 204, 0);">
+    <div class="container" style="text-align:center;">
+        <h1 class="display-4">Login</h1>
+
+    </div>
+</div>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Message
+    </div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Error
+    </div>
+}
+
+<div id="info">
+    <div class="container" style="margin-top:30px; width:50%; margin: auto; padding:1% 11% 1% 11%;">
+        <form method="post" action="\Users\Login">
+            @Html.AntiForgeryToken()
+            <h5>Username</h5>
+            <input type="text" name="username" class="form-control" />
+            <h5>Password</h5>
+            <input type="password" name="password" class="form-control" />
+            <input type="submit" value="log in" class="form-control" />
+        </form>
+    </div>
+</div>
+

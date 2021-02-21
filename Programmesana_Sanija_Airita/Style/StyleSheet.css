@@ -1,0 +1,19 @@
+﻿body {
+    background-image: url("/Style/bilde1.jpg");
+    background-size: cover;
+}
+
+#info {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+#folder {
+    margin: 7px;
+}
+
+#folder_body {
+    text-align: center;
+    border: 0.5px solid grey;
+}

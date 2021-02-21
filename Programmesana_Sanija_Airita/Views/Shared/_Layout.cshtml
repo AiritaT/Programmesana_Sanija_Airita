@@ -6,6 +6,7 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Style/StyleSheet.css" rel="stylesheet" />
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -16,22 +17,59 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
+                <!--Html.ActionLink("Posts", "Posts", "Posts", new { area = "" }, new { class = "navbar-brand" })-->
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li class="nav-item"><a href="\Home\ContactUs">Contact Us</a></li>
+
+                    @if (User.Identity.IsAuthenticated == false)
+                    {
+                        <li class="nav-item"><a href="\Users\Login">Log in</a></li>
+                        <li class="nav-item"><a href="\Users\Registration">Register</a></li>
+                        <li class="nav-item"><a href="\Files\Files">File Repository</a></li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a href="\Files\Files">File Repository</a></li>
+                        if (User.IsInRole("Admin"))
+                        {
+                            <li><a href="\Users\Users">All Users</a></li>
+                        }
+
+                    }
                 </ul>
+                @{
+                    string fullName = "Guest";
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        var myloggedInUser = new Programmesana_Sanija_Airita.Controllers.DataAccess.UsersRepository().GetUserByUsername(User.Identity.Name);
+                        fullName = myloggedInUser.Name + " " + myloggedInUser.Surname;
+                    }
+                }
+                @if (User.Identity.IsAuthenticated == false)
+                {
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item"><a href="\Users\Login">@fullName</a></li>
+                    </ul>
+                }
+                else
+                {
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item"><a href="\Users\Profile">@fullName</a></li>
+                        <li class="nav-item"><a href="\Users\Logout">Log out</a></li>
+                    </ul>
+                }
             </div>
         </div>
     </div>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <h5 style="text-align:center">&copy; @DateTime.Now.Year - Sanija Boitmane and Airita Tirša</h5>
         </footer>
     </div>
 
