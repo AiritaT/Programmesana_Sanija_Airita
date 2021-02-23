@@ -7,61 +7,58 @@
 
 <h2>Details</h2>
 
-<div>
-    <h4>File</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
+<div class="container-fluaid" id="info">
+    <div class="container">
+        <h3 style="text-align:center; padding-top:20px;">@Html.DisplayFor(model => model.Title)</h3>
+        <hr />
 
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
+        @foreach (var f in new Programmesana_Sanija_Airita.Controllers.DataAccess.FilesRepository().GetUploadForFiles(Model.id))
+        {
+            var cipher = f.Path;
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+        <div class="text-center">
+            @if (cipher != null)
+                {
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
+            <iframe src='~/FileStorage/@cipher' width='700px' height='600px' frameborder='0'>@f.Path</iframe>
 
-        <dd>
-            @Html.DisplayFor(model => model.Date)
-        </dd>
+                }
+                else
+                {
+            <img src="https://icons-for-free.com/iconfiles/png/512/document+file+files+folder+zip+icon-1320167967650306400.png" style="height:200px; width: auto;" />
+                }
+            <br>
+            @*<a href="/Posts/Download?id=@cipher">Download</a>*@
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Share)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Share)
-        </dd>
+        </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Category.Name)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Category.Name)
-        </dd>
+        }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Name)
-        </dt>
+    </div>
+    <div style="text-align:center;">
+        <h4>Description</h4>
+        <hr />
+        <p>@Html.DisplayFor(model => model.Description)</p>
+        <br />
+        <h4>File category</h4>
+        <hr />
+        <p>@Html.DisplayFor(model => model.Category.Name)</p>
+        <br />
+        <h4>File creator</h4>
+        <hr />
+        <p>@Html.DisplayFor(model => model.User.Name) @Html.DisplayFor(model => model.User.Surname)</p>
+    </div>
+    <div style="text-align:right;">
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Name)
-        </dd>
+        @Html.DisplayFor(model => model.Date)
 
-    </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+        @Html.ActionLink("Back to List", "Index")
+        @* Delete function here *@
+    </p>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
