@@ -41,8 +41,13 @@ namespace Programmesana_Sanija_Airita.Controllers.DataAccess
         public bool Login(string username, string password)
         {
             if (Entity.Users.SingleOrDefault(x => x.Username == username && x.Password == password) == null)
-                return false;
-            else return true;
+            { return false; }
+            else { 
+             return true;
+        }}
+        public IQueryable<Role> GetRoles()
+        {
+            return Entity.Roles;
         }
         public IQueryable<User> GetUsers()
         {

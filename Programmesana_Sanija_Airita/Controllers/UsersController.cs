@@ -9,13 +9,13 @@ using System.Web.Mvc;
 using Programmesana_Sanija_Airita.Controllers.DataAccess;
 using Programmesana_Sanija_Airita.Models;
 using System.IO;
+using Programmesana_Sanija_Airita.HashPassword;
 using System.Web.Security;
 
 namespace Programmesana_Sanija_Airita.Controllers
 {
     public class UsersController : Controller
     {
-      
         [HttpGet]
         public ActionResult Registration()
         {
@@ -34,23 +34,30 @@ namespace Programmesana_Sanija_Airita.Controllers
                         UsersRepository ur = new UsersRepository();
                         if (ur.DoesUsernameExist(u.Username) == true)
                         {
-                            ModelState.AddModelError("UsernameExist", "Username already exist");
-                            return View(u);
+                            ViewBag.Error = "Username already exist";
+                            //return View(u);
                         }
-                        
-                           // u.Password = u.Password;
+                        else
+                        {
+                            u.Password = Encryption.HashPassword(u.Password)
+                                ;
                             ur.AddUser(u);
                             Role defaultrole = ur.GetDefaultRole();
                             ur.AllocateRoleToUser(u, defaultrole);
 
-                           
+
                             ViewBag.Message = "Registration successful";
                             ModelState.Clear();
+                        }
                     }
                     else
                     {
                         ViewBag.Error = "password do not match";
                     }
+                }
+                else
+                {
+                    ViewBag.Error = "Check your inputs";
                 }
             }
             catch (Exception ex)
@@ -80,7 +87,7 @@ namespace Programmesana_Sanija_Airita.Controllers
             {
                 if (ur.Login(username, password) == true)
                 {
-                    //System.Web.Security.FormsAuthentication.SetAuthCookie(username, true);
+                    System.Web.Security.FormsAuthentication.SetAuthCookie(username, true);
                     return RedirectToAction("Files", "Files");
                 }
                 else
@@ -90,15 +97,16 @@ namespace Programmesana_Sanija_Airita.Controllers
             }
             return View();
         }
-       
-        [HttpPost]
-        [Authorize]
+
+       // [Authorize]
+       // [HttpPost]
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult List()
         {
             UsersRepository ur = new UsersRepository();
@@ -134,6 +142,39 @@ namespace Programmesana_Sanija_Airita.Controllers
                 return View();
             }
         }
-        
-    }
+        /*[HttpGet]
+        public ActionResult Share(string username)
+        {
+           /* using (ProgrammesanaEntities1 db = new ProgrammesanaEntities1())
+            {
+                return View(db.Users.Where(x => x.Username == username).FirstOrDefault());
+            }
+            /*File f = new File();
+
+             using(ProgrammesanaEntities1 db = new ProgrammesanaEntities1())
+             {
+
+                 f.UserCollection = db.Users.ToList();
+             }
+
+             return View(it);*/
+        }
+
+        /*[HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Share (File f, Guid id)
+        {
+
+            FilesRepository ir = new FilesRepository();
+          
+            var file = ir.GetFiles().SingleOrDefault(x => x.id == id);
+           
+            file.Share = f.Share;
+           
+            ir.Entity.SaveChanges();
+
+            return RedirectToAction("List", "Files");
+        }*/
+
+    
 }

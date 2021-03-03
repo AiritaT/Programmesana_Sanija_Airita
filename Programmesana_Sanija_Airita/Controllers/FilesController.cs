@@ -64,7 +64,7 @@ namespace Programmesana_Sanija_Airita.Controllers
 
             return View();
         }
-        [ValidateAntiForgeryToken]
+       // [ValidateAntiForgeryToken]
         [Authorize]
         public ActionResult Search(string keyword)
         {
@@ -140,6 +140,16 @@ namespace Programmesana_Sanija_Airita.Controllers
             {
                 TempData["error"] = "Value is not valid";
                 return RedirectToAction("List");
+            }
+        }
+        [HttpGet]
+        [Authorize]
+        public ActionResult Share(string username)
+        {
+            
+            using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1 ())
+            {
+                return View(dc.Users.Where(x => x.Username == username).FirstOrDefault());
             }
         }
     }

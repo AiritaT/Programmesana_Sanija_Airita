@@ -18,7 +18,23 @@ namespace Programmesana_Sanija_Airita
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
-       
+        protected void Application_AuthenticateRequest(object sender, EventArgs e)
+        {     if (User != null)
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Programmesana_Sanija_Airita.Controllers.DataAccess.UsersRepository ur = new Controllers.DataAccess.UsersRepository();
+                    var userFromDb = ur.GetUserByUsername(User.Identity.Name); 
+
+                    var rolesOfUser = userFromDb.Roles;
+
+                    GenericPrincipal gp = new GenericPrincipal(User.Identity, rolesOfUser.Select(x => x.Title).ToArray());
+
+                    Context.User = gp;
+
+                }
+            }
+        }
 
     }
 }
