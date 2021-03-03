@@ -49,7 +49,7 @@ namespace Programmesana_Sanija_Airita.Controllers
                     //new LogsRepository().Log(User.Identity.Name, controllerName + "\\" + actionName, "Post" + data.Id + "added", LogType.Information);
                     ViewBag.Message = "Item added successfully";
 
-                    return RedirectToAction("Files", new { id = data.id });
+                    return RedirectToAction("Upload", new { id = data.id });
                 }
                 else
                 {

@@ -1,0 +1,47 @@
+﻿@model Programmesana_Sanija_Airita.Models.File
+
+@{
+    ViewBag.Title = "Upload";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="jumbotron jumbotron-fluid" style="background:rgb(255, 204, 0);">
+    <div class="container" style="text-align:center;">
+        <h1 class="display-4">File upload</h1>
+
+    </div>
+</div>
+
+@if (ViewBag.Message != null)
+{
+<div class="alert alert-success" role="alert">
+    @ViewBag.Message
+</div>
+}
+@if (ViewBag.Error != null)
+{
+<div class="alert alert-danger" role="alert">
+    @ViewBag.Error
+</div>
+}
+
+<div class="container-fluid" id="info">
+    <form method="post" action="\File\Upload" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <div class="container-fluid">
+            <div style="float:right; margin-bottom:20px;">
+                @Html.ActionLink("Skip", "Files")
+            </div>
+        </div>
+
+        <input type="hidden" value="@Model.id" name="id" />
+
+        <h4>Choose your file</h4>
+        <input type="file" name="file" class="form-control" />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10" style="margin: 10px;">
+                <input type="submit" value="Save" class="btn btn-warning" id="aptiprina" />
+            </div>
+        </div>
+    </form>
+</div>

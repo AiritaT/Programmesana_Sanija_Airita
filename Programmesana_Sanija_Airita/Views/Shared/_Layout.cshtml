@@ -42,10 +42,12 @@
                 </ul>
                 @{
                     string fullName = "Guest";
+                    string userId = "";
                     if (User.Identity.IsAuthenticated)
                     {
                         var myloggedInUser = new Programmesana_Sanija_Airita.Controllers.DataAccess.UsersRepository().GetUserByUsername(User.Identity.Name);
                         fullName = myloggedInUser.Name + " " + myloggedInUser.Surname;
+                        userId = myloggedInUser.Username;
                     }
                 }
                 @if (User.Identity.IsAuthenticated == false)
@@ -57,7 +59,7 @@
                 else
                 {
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="nav-item"><a href="\Users\Profile">@fullName</a></li>
+                        <li class="nav-item"><a href="\Users\Profile?id=@userId">@fullName</a></li>
                         <li class="nav-item"><a href="\Users\Logout">Log out</a></li>
                     </ul>
                 }

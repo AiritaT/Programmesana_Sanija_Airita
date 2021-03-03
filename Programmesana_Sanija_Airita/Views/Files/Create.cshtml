@@ -58,7 +58,10 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Share, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Share, new { htmlAttributes = new { @class = "form-control" } })
+                    <select class="form-control" name="Share">
+                        <option value="True">Yes</option>
+                        <option value="False">No</option>
+                    </select>
                     @Html.ValidationMessageFor(model => model.Share, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -72,25 +75,15 @@
                         {
                             <option value="@c.id">@c.Name</option>
                         }
-
-
                     </select>
-
-
-
                     @Html.ValidationMessageFor(model => model.Categories_id, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" id="aptiprina" />
+                    <input type="submit" value="Next" class="btn btn-default" id="aptiprina" />
                 </div>
-            </div>
-        </div>
-        <div class="container-fluid">
-            <div style="float:right; margin-bottom:20px;">
-                @Html.ActionLink("Next", "Upload")
             </div>
         </div>
     </div>

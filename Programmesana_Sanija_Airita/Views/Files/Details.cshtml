@@ -5,10 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
-
 <div class="container-fluaid" id="info">
     <div class="container">
+        <div style="float: right; margin-right: 30px; ">
+            <a href="/File/Edit?id=@Model.id"><img src="~/Style/Edit.png" style="height:30px; width: auto; margin:5px;" alt="Edit" /></a>
+            <a href="/File/Delete?id=@Model.id" onclick="return window.confirm('Do You really want to delete file?')"><img src="~/Style/delete.png" style="height:30px; width: auto; margin:5px;" alt="Delete" /></a>
+        </div>
         <h3 style="text-align:center; padding-top:20px;">@Html.DisplayFor(model => model.Title)</h3>
         <hr />
 
@@ -16,25 +18,22 @@
         {
             var cipher = f.Path;
 
-
         <div class="text-center">
             @if (cipher != null)
                 {
 
-            <iframe src='~/FileStorage/@cipher' width='700px' height='600px' frameborder='0'>@f.Path</iframe>
+                    <iframe src='~/FileStorage/@cipher' width='700px' height='600px' frameborder='0'>@f.Path</iframe>
+                    <br />
+                    <a href="/File/Download?id=@cipher"><img src="~/Style/Download.png" style="height:30px; width: auto; margin:10px;" alt="Download" /></a>
+                    <br />
 
-                }
-                else
-                {
-            <img src="https://icons-for-free.com/iconfiles/png/512/document+file+files+folder+zip+icon-1320167967650306400.png" style="height:200px; width: auto;" />
-                }
+               }
+            else{
+
+                @Html.ActionLink("Upload", "Upload", new { id = Model.id })
+            }
             <br>
-            @*<a href="/Posts/Download?id=@cipher">Download</a>*@
-
-
         </div>
-
-
         }
 
     </div>
@@ -57,8 +56,6 @@
 
     </div>
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
-        @Html.ActionLink("Back to List", "Index")
-        @* Delete function here *@
+        @Html.ActionLink("Back to files", "Files")
     </p>
 </div>
