@@ -7,15 +7,28 @@
 
 <div class="jumbotron jumbotron-fluid" style="background:rgb(255, 204, 0);">
     <div class="container" style="text-align:center;">
-        <h1 class="display-4">Edit Profile</h1>
+        <h1 class="display-4">Profile editing</h1>
     </div>
 </div>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Message
+    </div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Error
+    </div>
+}
 
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal" id="info">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Username)
@@ -54,25 +67,25 @@
 
         @if (User.IsInRole("Admin"))
         {
-        <div class="form-group">
-            @Html.LabelFor(model => model.Blocked, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Blocked)
-                    @Html.ValidationMessageFor(model => model.Blocked, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Blocked, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.Blocked)
+                        @Html.ValidationMessageFor(model => model.Blocked, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Active)
-                    @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.Active)
+                        @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
-        </div>
         }
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -83,7 +96,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back", "Profile", new { id = Model.Username})
+    @Html.ActionLink("Back", "Profile", new { id = Model.Username })
 </div>
 
 @section Scripts {
