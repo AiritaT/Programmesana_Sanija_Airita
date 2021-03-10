@@ -8,8 +8,8 @@
 <div class="container-fluaid" id="info">
     <div class="container">
         <div style="float: right; margin-right: 30px; ">
-            <a href="/File/Edit?id=@Model.id"><img src="~/Style/Edit.png" style="height:30px; width: auto; margin:5px;" alt="Edit" /></a>
-            <a href="/File/Delete?id=@Model.id" onclick="return window.confirm('Do You really want to delete file?')"><img src="~/Style/delete.png" style="height:30px; width: auto; margin:5px;" alt="Delete" /></a>
+            <a href="/Files/Edit?id=@Model.id"><img src="~/Style/Edit.png" style="height:30px; width: auto; margin:5px;" alt="Edit" /></a>
+            <a href="/Files/Delete?id=@Model.id" onclick="return window.confirm('Do You really want to delete file?')"><img src="~/Style/delete.png" style="height:30px; width: auto; margin:5px;" alt="Delete" /></a>
         </div>
         <h3 style="text-align:center; padding-top:20px;">@Html.DisplayFor(model => model.Title)</h3>
         <hr />
@@ -24,7 +24,7 @@
 
                     <iframe src='~/FileStorage/@cipher' width='700px' height='600px' frameborder='0'>@f.Path</iframe>
                     <br />
-                    <a href="/File/Download?id=@cipher"><img src="~/Style/Download.png" style="height:30px; width: auto; margin:10px;" alt="Download" /></a>
+                    <a href="/Files/Download?id=@cipher"><img src="~/Style/Download.png" style="height:30px; width: auto; margin:10px;" alt="Download" /></a>
                     <br />
 
                }

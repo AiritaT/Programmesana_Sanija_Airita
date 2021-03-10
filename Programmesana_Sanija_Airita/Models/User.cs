@@ -27,7 +27,7 @@ namespace Programmesana_Sanija_Airita.Models
         public string Password { get; set; }
         public string Email { get; set; }
         public bool Blocked { get; set; }
-        public Nullable<bool> Active { get; set; }
+        public bool Active { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<File> Files { get; set; }

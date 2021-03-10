@@ -138,6 +138,7 @@
     <Compile Include="Controllers\DataAccess\ConnectionClass.cs" />
     <Compile Include="Controllers\DataAccess\FilesRepository.cs" />
     <Compile Include="Controllers\DataAccess\UsersRepository.cs" />
+    <Compile Include="Controllers\Files1Controller.cs" />
     <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -228,6 +229,7 @@
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -244,6 +246,12 @@
     <Content Include="Views\Users\login.cshtml" />
     <Content Include="Views\Users\Profile.cshtml" />
     <Content Include="Views\Files\Upload.cshtml" />
+    <Content Include="Views\Files\Details.cshtml" />
+    <Content Include="Views\Files1\Create.cshtml" />
+    <Content Include="Views\Files1\Delete.cshtml" />
+    <Content Include="Views\Files1\Details.cshtml" />
+    <Content Include="Views\Files1\Edit.cshtml" />
+    <Content Include="Views\Files1\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
