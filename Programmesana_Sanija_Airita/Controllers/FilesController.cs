@@ -74,17 +74,19 @@ namespace Programmesana_Sanija_Airita.Controllers
             return View("Files", filteredList);
             //metids list and search
         }
+
+        /*[ValidateAntiForgeryToken]
         public ActionResult Delete(Guid id)
         {
             FilesRepository fr = new FilesRepository();
 
-            var file = fr.GetFiles().SingleOrDefault(x => x.id == id);
-            if (file != null)
-                fr.DeleteFile(file);
+              var file = fr.GetFiles().SingleOrDefault(x => x.id == id);
+              if (file != null)
+                  fr.DeleteFile(file);
 
-            TempData["Message"] = "Deleted successfully";
-            return RedirectToAction("Files");
-        }
+              TempData["Message"] = "Deleted successfully";
+              return RedirectToAction("Files");
+        }*/
         [HttpGet]
         public ActionResult Upload(Guid id)
         {
@@ -100,20 +102,36 @@ namespace Programmesana_Sanija_Airita.Controllers
             FilesRepository fr = new FilesRepository();
             if (file != null)
             {
+                byte[] readBytes = new byte[2];
+                file.InputStream.Read(readBytes, 0, 2);
+                file.InputStream.Position = 0;
 
+                if (
+                    (readBytes[0] == 80 & readBytes[1] == 75) || //zip
+                    (readBytes[0] == 82 & readBytes[1] == 97) || //rar
+                    (readBytes[0] == 137 & readBytes[1] == 80) || //png
+                    (readBytes[0] == 105 & readBytes[1] == 115)//mp4
+                    )
 
-                //string Path = Server.MapPath("//FileStorage") + "//" + newFilename;
-                string name = Path.GetFileName(file.FileName);
-                string path = Path.Combine(Server.MapPath("~/FileStorage") +"//"+ name );
-                file.SaveAs(path);
-                ViewBag.Message = "File uploaded";
-                Upload u = new Upload();
-                u.File_id = id;
-                u.Path = name;
-                fr.AddUpload(u);
-                ViewBag.Message = "File is uploaded successfully";
+                {
+                    if (file.ContentLength <= 2147483647)
+                    {
+                        //string Path = Server.MapPath("//FileStorage") + "//" + newFilename;
+                        string name = Path.GetFileName(file.FileName);
+                        string path = Path.Combine(Server.MapPath("~/FileStorage") + "//" + name);
+                        file.SaveAs(path);
+                        ViewBag.Message = "File uploaded";
+                        Upload u = new Upload();
+                        u.File_id = id;
+                        u.Path = name;
+                        fr.AddUpload(u);
+                        ViewBag.Message = "File is uploaded successfully";
+                    }
+                    else
+                        ViewBag.Error = "File should be smaller than 2 GB";
+                }
+                else ViewBag.Error = "File type not allowed";
             }
-
             var fails = fr.GetFiles().SingleOrDefault(x => x.id == id);
             return View(fails);
 
@@ -152,6 +170,56 @@ namespace Programmesana_Sanija_Airita.Controllers
                 return View(dc.Users.Where(x => x.Username == username).FirstOrDefault());
             }
         }
+       // [HttpGet]
+        public ActionResult Edit (Guid id)
+        {
+            ProgrammesanaEntities1 db = new ProgrammesanaEntities1();
+            File f = db.Files.Where(x => x.id == id).FirstOrDefault();
+
+            db.Dispose();
+            return View(f);
+        }
+
+       // [HttpPost]
+        public ActionResult Save(File file)
+        {
+            ProgrammesanaEntities1 db = new ProgrammesanaEntities1();
+            File f = db.Files.Where(x => x.id == file.id).FirstOrDefault();
+
+            f.Title = f.Title;
+            f.Description = f.Description;
+            f.Date = f.Date;
+            f.Categories_id = f.Categories_id;
+            f.User_id = f.User_id;
+            f.Share = f.Share;
+            f.Uploads = f.Uploads;
+            db.SaveChanges();
+
+            db.Dispose();
+            return Redirect("Files");
+        }
+
+        public ActionResult Delete(Guid id)
+        {
+            ProgrammesanaEntities1 db = new ProgrammesanaEntities1();
+            File file = db.Files.Find(id);
+            db.Uploads.RemoveRange(file.Uploads);
+            db.Files.Remove(file);
+            db.SaveChanges();
+            return RedirectToAction("Files");
+                
+            /*Files.Where(x => x.id == f.id).FirstOrDefault();
+            var uploads = db.Uploads.Where(b => b.File_id == e.id).AsEnumerable();
+            foreach( var bk in uploads)
+            {
+                var b = bk;
+                e.Uploads.Remove(b);
+            }
+            db.Files.Remove(e);
+            db.SaveChanges();
+            db.Dispose();*/
+        }
     }
+
    
 }

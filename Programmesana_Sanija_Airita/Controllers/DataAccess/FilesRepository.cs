@@ -27,7 +27,7 @@ namespace Programmesana_Sanija_Airita.Controllers.DataAccess
         public void DeleteFile(File f)
         {
             Entity.Files.Remove(f);
-            Entity.SaveChanges();
+           Entity.SaveChanges();
         }
         public IQueryable<Upload> GetUploadForFiles(Guid id)
         {
@@ -43,6 +43,9 @@ namespace Programmesana_Sanija_Airita.Controllers.DataAccess
             Entity.Uploads.Remove(u);
             Entity.SaveChanges();
         }
-       
+        public IQueryable<Upload> GetUploads()
+        {
+            return Entity.Uploads;
+        }
     }
 }

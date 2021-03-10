@@ -85,7 +85,7 @@ namespace Programmesana_Sanija_Airita.Controllers
             }
             else
             {
-                if (ur.Login(username, password) == true)
+                if (ur.Login(username, Encryption.HashPassword(password)) == true)
                 {
                     System.Web.Security.FormsAuthentication.SetAuthCookie(username, true);
                     return RedirectToAction("Files", "Files");
@@ -142,6 +142,41 @@ namespace Programmesana_Sanija_Airita.Controllers
                 return View();
             }
         }
+       /* public ActionResult Profile (User u)
+        {
+        try
+        {
+            UsersRepository ir = new UsersRepository();
+            var myUser = ir.GetUsers().SingleOrDefault(x => x.Username == u.Username );
+            return View(User);
+        }
+            catch
+            {
+                //TempData["error"] = "Value is not valid";
+                return RedirectToAction("List");
+            }
+        }*/
+        public ActionResult EditProfile(string username)
+        {
+            using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
+            {
+                return View(dc.Users.Where(x => x.Username == username).FirstOrDefault());
+            }
+        }
+        public ActionResult SaveProfile(User u)
+        {
+            ProgrammesanaEntities1 db = new ProgrammesanaEntities1();
+            User user = db.Users.Where(x => x.Username == u.Username).FirstOrDefault();
+
+            u.Name = u.Name;
+            u.Surname = u.Surname;
+            u.Username = u.Username;
+            u.Password = u.Password;
+            db.SaveChanges();
+
+            db.Dispose();
+            return Redirect("Users");
+        }
         /*[HttpGet]
         public ActionResult Share(string username)
         {
@@ -158,23 +193,22 @@ namespace Programmesana_Sanija_Airita.Controllers
              }
 
              return View(it);*/
-        }
+    }
+    /*[HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Share (File f, Guid id)
+    {
 
-        /*[HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Share (File f, Guid id)
-        {
+        FilesRepository ir = new FilesRepository();
 
-            FilesRepository ir = new FilesRepository();
-          
-            var file = ir.GetFiles().SingleOrDefault(x => x.id == id);
-           
-            file.Share = f.Share;
-           
-            ir.Entity.SaveChanges();
+        var file = ir.GetFiles().SingleOrDefault(x => x.id == id);
 
-            return RedirectToAction("List", "Files");
-        }*/
+        file.Share = f.Share;
 
+        ir.Entity.SaveChanges();
+
+        return RedirectToAction("List", "Files");
+    }*/
     
+
 }

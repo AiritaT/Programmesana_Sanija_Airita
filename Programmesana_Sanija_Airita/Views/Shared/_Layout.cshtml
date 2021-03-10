@@ -22,7 +22,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="nav-item"><a href="\Home\ContactUs">Contact Us</a></li>
+                    <li class="nav-item"><a href="\Home\Contact">Contact Us</a></li>
 
                     @if (User.Identity.IsAuthenticated == false)
                     {
@@ -35,7 +35,7 @@
                         <li class="nav-item"><a href="\Files\Files">File Repository</a></li>
                         if (User.IsInRole("Admin"))
                         {
-                            <li><a href="\Users\Users">All Users</a></li>
+                            <li><a href="\Users\List">All Users</a></li>
                         }
 
                     }
@@ -59,7 +59,7 @@
                 else
                 {
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="nav-item"><a href="\Users\Profile?id=@userId">@fullName</a></li>
+                        <li class="nav-item"><a href="\Users\EditProfile?id=@userId">@fullName</a></li>
                         <li class="nav-item"><a href="\Users\Logout">Log out</a></li>
                     </ul>
                 }
