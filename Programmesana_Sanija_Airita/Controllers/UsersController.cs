@@ -142,8 +142,7 @@ namespace Programmesana_Sanija_Airita.Controllers
                 return View();
             }
         }
-        
-        public ActionResult Profile (User u)
+       /* public ActionResult Profile (User u)
         {
         try
         {
@@ -156,6 +155,27 @@ namespace Programmesana_Sanija_Airita.Controllers
                 //TempData["error"] = "Value is not valid";
                 return RedirectToAction("List");
             }
+        }*/
+        public ActionResult EditProfile(string username)
+        {
+            using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
+            {
+                return View(dc.Users.Where(x => x.Username == username).FirstOrDefault());
+            }
+        }
+        public ActionResult SaveProfile(User u)
+        {
+            ProgrammesanaEntities1 db = new ProgrammesanaEntities1();
+            User user = db.Users.Where(x => x.Username == u.Username).FirstOrDefault();
+
+            u.Name = u.Name;
+            u.Surname = u.Surname;
+            u.Username = u.Username;
+            u.Password = u.Password;
+            db.SaveChanges();
+
+            db.Dispose();
+            return Redirect("Users");
         }
         /*[HttpGet]
         public ActionResult Share(string username)
@@ -173,8 +193,7 @@ namespace Programmesana_Sanija_Airita.Controllers
              }
 
              return View(it);*/
-        }
-
+    }
     /*[HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult Share (File f, Guid id)
