@@ -199,15 +199,25 @@ namespace Programmesana_Sanija_Airita.Controllers
             return Redirect("Files");
         }
 
-        public ActionResult Delete(File f)
+        public ActionResult Delete(Guid id)
         {
             ProgrammesanaEntities1 db = new ProgrammesanaEntities1();
-            File e = db.Files.Where(x => x.id == f.id).FirstOrDefault();
-
+            File file = db.Files.Find(id);
+            db.Uploads.RemoveRange(file.Uploads);
+            db.Files.Remove(file);
+            db.SaveChanges();
+            return RedirectToAction("Files");
+                
+            /*Files.Where(x => x.id == f.id).FirstOrDefault();
+            var uploads = db.Uploads.Where(b => b.File_id == e.id).AsEnumerable();
+            foreach( var bk in uploads)
+            {
+                var b = bk;
+                e.Uploads.Remove(b);
+            }
             db.Files.Remove(e);
             db.SaveChanges();
-            db.Dispose();
-            return View(e);
+            db.Dispose();*/
         }
     }
 
