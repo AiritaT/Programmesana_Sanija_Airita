@@ -142,20 +142,20 @@ namespace Programmesana_Sanija_Airita.Controllers
                 return View();
             }
         }
-       /* public ActionResult Profile (User u)
+        public ActionResult UserProfile(User u)
         {
-        try
-        {
-            UsersRepository ir = new UsersRepository();
-            var myUser = ir.GetUsers().SingleOrDefault(x => x.Username == u.Username );
-            return View(User);
-        }
+            try
+            {
+                UsersRepository ir = new UsersRepository();
+                var myUser = ir.GetUsers().SingleOrDefault(x => x.Username == u.Username);
+                return View(User);
+            }
             catch
             {
                 //TempData["error"] = "Value is not valid";
                 return RedirectToAction("List");
             }
-        }*/
+        }
         public ActionResult EditProfile(string username)
         {
             using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
