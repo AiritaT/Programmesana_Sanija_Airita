@@ -123,25 +123,25 @@ namespace Programmesana_Sanija_Airita.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Edit(User u)
-        {
-            try
-            {
-                using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
-                {
-                    var myUser = dc.Users.SingleOrDefault(x => x.Username == u.Username);
+        //public ActionResult Edit(User u)
+        //{
+        //    try
+        //    {
+        //        using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
+        //        {
+        //            var myUser = dc.Users.SingleOrDefault(x => x.Username == u.Username);
 
-                    myUser.Blocked = u.Blocked;
-                    dc.SaveChanges();
+        //            myUser.Blocked = u.Blocked;
+        //            dc.SaveChanges();
 
-                }
-                return RedirectToAction("List");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //        }
+        //        return RedirectToAction("List");
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
         public ActionResult UserProfile(User u)
         {
             try
