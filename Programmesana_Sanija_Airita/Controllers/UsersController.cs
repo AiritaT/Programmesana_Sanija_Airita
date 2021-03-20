@@ -123,39 +123,39 @@ namespace Programmesana_Sanija_Airita.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Edit(User u)
+        //public ActionResult Edit(User u)
+        //{
+        //    try
+        //    {
+        //        using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
+        //        {
+        //            var myUser = dc.Users.SingleOrDefault(x => x.Username == u.Username);
+
+        //            myUser.Blocked = u.Blocked;
+        //            dc.SaveChanges();
+
+        //        }
+        //        return RedirectToAction("List");
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
+        public ActionResult UserProfile(User u)
         {
             try
             {
-                using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
-                {
-                    var myUser = dc.Users.SingleOrDefault(x => x.Username == u.Username);
-
-                    myUser.Blocked = u.Blocked;
-                    dc.SaveChanges();
-
-                }
-                return RedirectToAction("List");
+                UsersRepository ir = new UsersRepository();
+                var myUser = ir.GetUsers().SingleOrDefault(x => x.Username == u.Username);
+                return View(User);
             }
-            catch
-            {
-                return View();
-            }
-        }
-       /* public ActionResult Profile (User u)
-        {
-        try
-        {
-            UsersRepository ir = new UsersRepository();
-            var myUser = ir.GetUsers().SingleOrDefault(x => x.Username == u.Username );
-            return View(User);
-        }
             catch
             {
                 //TempData["error"] = "Value is not valid";
                 return RedirectToAction("List");
             }
-        }*/
+        }
         public ActionResult EditProfile(string username)
         {
             using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())

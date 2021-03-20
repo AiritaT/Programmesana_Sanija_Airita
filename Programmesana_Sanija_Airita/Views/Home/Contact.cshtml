@@ -1,17 +1,35 @@
 ﻿@{
     ViewBag.Title = "Contact";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+<div class="jumbotron jumbotron-fluid" style="background:rgb(255, 204, 0);">
+    <div class="container" style="text-align:center;">
+        <h1 class="display-4">Contacts</h1>
+    </div>
+</div>
 
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Message
+    </div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Error
+    </div>
+}
+
+<div id="info" style="text-align:center">
+    <div>
+        <h3>Contact to Admin via E-mail</h3>
+        <p><b>E-mail: </b>admin.email@example.com</p>
+    </div>
+    <hr/>
+    <div>
+        <h3>Our Location</h3>
+        <p><b>Address: </b>Lielā iela 2, Jelgava, LV-3001</p>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2193.098763477824!2d23.73098201557557!3d56.65535998080437!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46ef2544a60ec557%3A0xa384842727b7a5f1!2sLatvia%20University%20of%20Life%20Sciences%20and%20Technologies!5e0!3m2!1sen!2slv!4v1578077765638!5m2!1sen!2slv" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+    </div>
+</div>

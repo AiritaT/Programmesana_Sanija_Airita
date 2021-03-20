@@ -3,7 +3,6 @@
 @{
     ViewBag.Title = "Files";
 }
-
 <div class="jumbotron jumbotron-fluid" style="background:rgb(255, 204, 0);">
     <div class="container" style="text-align:center;">
         <h1 class="display-4">File Repository</h1>
@@ -27,52 +26,53 @@
         @foreach (var item in Model)
         {
             <div class="col-sm-2" id="folder">
-                @*@{
-                        var myloggedInUser = new WebApplication2.Controllers.DataAccess.UsersRepository().GetUserByUsername(User.Identity.Name);
-                    }
-                    @if (item.Shared == myloggedInUser.Username  || item.Creater == myloggedInUser.Username || User.IsInRole("Admin") )
-                    {*@
+                @{
+                    var myloggedInUser = new Programmesana_Sanija_Airita.Controllers.DataAccess.UsersRepository().GetUserByUsername(User.Identity.Name);
+                }
+                @if (item.Share == myloggedInUser.Username@*true*@ || item.User_id == myloggedInUser.Username)
+                  {
 
-                <h3 style="text-align:center;">
-                    @Html.DisplayFor(modelItem => item.Title)
-                    @{string kategorija = item.Category.Name;}
-                </h3>
+                    <h3 style="text-align:center;">
+                        @Html.DisplayFor(modelItem => item.Title)
+                        @{string kategorija = item.Category.Name;}
+                    </h3>
 
-                <div class="row" id="folder_body">
-                    @if (kategorija == "Document")
-                    {
-                    <img src="https://image.flaticon.com/icons/png/512/32/32329.png" style="height:100px; width: auto; margin: 5px;" />
-                    }
-                    else if (kategorija == "Picture")
-                    {
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Picture_icon_BLACK.svg/1200px-Picture_icon_BLACK.svg.png" style="height:100px; width: auto; margin: 5px;" />
-                    }
-                    else if (kategorija == "Music")
-                    {
-                    <img src="https://icons-for-free.com/iconfiles/png/512/music-131964784909142833.png" style="height:100px; width: auto; margin: 5px;" />
-                    }
-                    else if (kategorija == "Database")
-                    {
-                    <img src="https://i.pinimg.com/originals/8a/bc/4d/8abc4d98d9df0d8a9caa486fe1aa0ac5.png" style="height:100px; width: auto; margin: 5px;" />
-                    }
-                    else if (kategorija == "Video")
-                    {
-                    <img src="https://www.sat7uk.org/wp-content/uploads/2018/11/kisspng-video-production-freemake-video-downloader-video-icon-png-free-download-5a75f5b65c1b26.0363473915176800543773.png" style="height:100px; width: auto; margin: 5px;" />
-                    }
-                    else if (kategorija == "GIF")
-                    {
-                    <img src="https://freeiconshop.com/wp-content/uploads/edd/gif-outline.png" style="height:100px; width: auto; margin: 5px;" />
-                    }
-                    <hr />
-                    <h5 style="padding-left:15px"><b>@Html.DisplayFor(modelItem => item.Category.Name)</b></h5>
+                    <div class="row" id="folder_body">
+                        @if (kategorija == "Document")
+                        {
+                            <img src="https://image.flaticon.com/icons/png/512/32/32329.png" style="height:100px; width: auto; margin: 5px;" />
+                        }
+                        else if (kategorija == "Picture")
+                        {
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Picture_icon_BLACK.svg/1200px-Picture_icon_BLACK.svg.png" style="height:100px; width: auto; margin: 5px;" />
+                        }
+                        else if (kategorija == "Music")
+                        {
+                            <img src="https://icons-for-free.com/iconfiles/png/512/music-131964784909142833.png" style="height:100px; width: auto; margin: 5px;" />
+                        }
+                        else if (kategorija == "Database")
+                        {
+                            <img src="https://i.pinimg.com/originals/8a/bc/4d/8abc4d98d9df0d8a9caa486fe1aa0ac5.png" style="height:100px; width: auto; margin: 5px;" />
+                        }
+                        else if (kategorija == "Video")
+                        {
+                            <img src="https://www.sat7uk.org/wp-content/uploads/2018/11/kisspng-video-production-freemake-video-downloader-video-icon-png-free-download-5a75f5b65c1b26.0363473915176800543773.png" style="height:100px; width: auto; margin: 5px;" />
+                        }
+                        else if (kategorija == "GIF")
+                        {
+                            <img src="https://freeiconshop.com/wp-content/uploads/edd/gif-outline.png" style="height:100px; width: auto; margin: 5px;" />
+                        }
+                        <hr />
+                        <h5 style="padding-left:15px"><b>@Html.DisplayFor(modelItem => item.Category.Name)</b></h5>
 
-                    <h6>@Html.DisplayFor(modelItem => item.User_id)</h6>
-                    <h6 style="text-align:right;">@Convert.ToDateTime(item.Date).ToString("dd'/'MM'/'yyyy")</h6>
+                        <h6>@Html.DisplayFor(modelItem => item.User_id)</h6>
+                        <h6 style="text-align:right;">@Convert.ToDateTime(item.Date).ToString("dd'/'MM'/'yyyy")</h6>
 
-                    <div style="text-align:center">
-                        @Html.ActionLink("Details", "Details", new { id = item.id })
+                        <div style="text-align:center">
+                            @Html.ActionLink("Details", "Details", new { id = item.id })
+                        </div>
                     </div>
-                </div>
+                }
             </div>
         }
     </div>

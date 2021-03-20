@@ -234,20 +234,17 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Files\Edit.cshtml" />
     <Content Include="Views\Files\Create.cshtml" />
     <Content Include="Views\Files\Files.cshtml" />
     <Content Include="Views\Users\Registration.cshtml" />
     <Content Include="Views\Users\login.cshtml" />
-    <Content Include="Views\Users\Profile.cshtml" />
     <Content Include="Views\Files\Upload.cshtml" />
     <Content Include="Views\Files\Details.cshtml" />
     <Content Include="Views\Users\EditProfile.cshtml" />
     <Content Include="Views\Users\List.cshtml" />
+    <Content Include="Views\Users\UserProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
