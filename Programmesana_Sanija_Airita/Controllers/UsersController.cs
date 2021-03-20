@@ -78,11 +78,15 @@ namespace Programmesana_Sanija_Airita.Controllers
             UsersRepository ur = new UsersRepository();
             User trylogin = ur.GetUserByUsername(username);
 
-            if (trylogin.Blocked == true)
+            if (trylogin == null)
             {
-
-                ViewBag.Error = "Your account is blocked. Contact Administrator";
+                ViewBag.Error = "There is no account";
             }
+               else if (trylogin.Blocked == true)
+                {
+
+                    ViewBag.Error = "Your account is blocked. Contact Administrator";
+                }
                 else if (ur.Login(username, Encryption.HashPassword(password)) == true)
                 {
 
@@ -93,10 +97,15 @@ namespace Programmesana_Sanija_Airita.Controllers
                 {
                     ViewBag.Error = "Login failed";
                 }
+                else
+                {
+                    ViewBag.Error = "Login failed";
+                }
+            
             
             return View();
-        }
-
+                 
+            }
        // [Authorize]
        // [HttpPost]
         public ActionResult Logout()
@@ -130,6 +139,7 @@ namespace Programmesana_Sanija_Airita.Controllers
                {
                    var myUser = dc.Users.SingleOrDefault(x => x.Username == u.Username);
 
+                    
                    myUser.Blocked = u.Blocked;
                    dc.SaveChanges();
 

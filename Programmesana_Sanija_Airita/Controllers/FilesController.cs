@@ -170,33 +170,36 @@ namespace Programmesana_Sanija_Airita.Controllers
                 return View(dc.Users.Where(x => x.Username == username).FirstOrDefault());
             }
         }
-       // [HttpGet]
+       [HttpGet]
         public ActionResult Edit (Guid id)
         {
-            ProgrammesanaEntities1 db = new ProgrammesanaEntities1();
-            File f = db.Files.Where(x => x.id == id).FirstOrDefault();
+            using (ProgrammesanaEntities1 db = new ProgrammesanaEntities1())
+            {
+                return View (db.Files.Where(x => x.id == id).FirstOrDefault());
 
-            db.Dispose();
-            return View(f);
+            };
         }
-
-       // [HttpPost]
-        public ActionResult Save(File file)
+        [HttpPost]
+        public ActionResult Edit(File file)
         {
-            ProgrammesanaEntities1 db = new ProgrammesanaEntities1();
-            File f = db.Files.Where(x => x.id == file.id).FirstOrDefault();
+            try
+            {
+                using (ProgrammesanaEntities1 db = new ProgrammesanaEntities1()){
+                      var myFile = db.Files.Where(x => x.id == file.id).FirstOrDefault();
 
-            f.Title = f.Title;
-            f.Description = f.Description;
-            f.Date = f.Date;
-            f.Categories_id = f.Categories_id;
-            f.User_id = f.User_id;
-            f.Share = f.Share;
-            f.Uploads = f.Uploads;
-            db.SaveChanges();
+                    myFile.Title = file.Title;
+                    myFile.Date = file.Date;
+                    myFile.Share = file.Share;
+                    myFile.Categories_id = file.Categories_id;
+                    db.SaveChanges();
+                 }
+                return RedirectToAction("Files");
+            }
+            catch
+            {
+                return View();
+            }
 
-            db.Dispose();
-            return Redirect("Files");
         }
         public ActionResult Delete(Guid id)
         {
