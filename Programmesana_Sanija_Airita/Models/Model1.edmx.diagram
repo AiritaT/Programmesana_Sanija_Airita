@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="982ab2e054f84a1c8ca133ca01058123" Name="Diagram1">
+      <Diagram DiagramId="689fc4342d89483a8879a583ee21ce2f" Name="Diagram1">
         <EntityTypeShape EntityType="ProgrammesanaModel.Category" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
         <EntityTypeShape EntityType="ProgrammesanaModel.File" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="ProgrammesanaModel.Role" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />

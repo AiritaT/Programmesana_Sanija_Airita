@@ -78,23 +78,22 @@ namespace Programmesana_Sanija_Airita.Controllers
             UsersRepository ur = new UsersRepository();
             User trylogin = ur.GetUserByUsername(username);
 
-            if(trylogin.Blocked == true)
+            if (trylogin.Blocked == true)
             {
 
                 ViewBag.Error = "Your account is blocked. Contact Administrator";
             }
-            else
-            {
-                if (ur.Login(username, Encryption.HashPassword(password)) == true)
+                else if (ur.Login(username, Encryption.HashPassword(password)) == true)
                 {
+
                     System.Web.Security.FormsAuthentication.SetAuthCookie(username, true);
                     return RedirectToAction("Files", "Files");
                 }
-                else
+                else if (ur.Login(username, Encryption.HashPassword(password)) == false)
                 {
                     ViewBag.Error = "Login failed";
                 }
-            }
+            
             return View();
         }
 
@@ -123,32 +122,32 @@ namespace Programmesana_Sanija_Airita.Controllers
             }
         }
         [HttpPost]
-        //public ActionResult Edit(User u)
-        //{
-        //    try
-        //    {
-        //        using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
-        //        {
-        //            var myUser = dc.Users.SingleOrDefault(x => x.Username == u.Username);
+        public ActionResult Edit(User u)
+        {
+            try
+            {
+                using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
+               {
+                   var myUser = dc.Users.SingleOrDefault(x => x.Username == u.Username);
 
-        //            myUser.Blocked = u.Blocked;
-        //            dc.SaveChanges();
+                   myUser.Blocked = u.Blocked;
+                   dc.SaveChanges();
 
-        //        }
-        //        return RedirectToAction("List");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+               }
+                return RedirectToAction("List");
+            }
+           catch
+            {
+                return View();
+            }
+        }
         public ActionResult UserProfile(User u)
         {
             try
             {
                 UsersRepository ir = new UsersRepository();
                 var myUser = ir.GetUsers().SingleOrDefault(x => x.Username == u.Username);
-                return View(User);
+                return View(myUser);
             }
             catch
             {

@@ -29,9 +29,9 @@
                 @{
                     var myloggedInUser = new Programmesana_Sanija_Airita.Controllers.DataAccess.UsersRepository().GetUserByUsername(User.Identity.Name);
                 }
-                @if (item.Share == myloggedInUser.Username@*true*@ || item.User_id == myloggedInUser.Username)
-                  {
-
+                @if (item.Share == "True" || item.User_id == myloggedInUser.Username)
+                {
+                  
                     <h3 style="text-align:center;">
                         @Html.DisplayFor(modelItem => item.Title)
                         @{string kategorija = item.Category.Name;}
@@ -72,7 +72,8 @@
                             @Html.ActionLink("Details", "Details", new { id = item.id })
                         </div>
                     </div>
-                }
+                                
+                            }
             </div>
         }
     </div>
