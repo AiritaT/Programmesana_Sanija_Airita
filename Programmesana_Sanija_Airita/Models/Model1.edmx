@@ -20,7 +20,7 @@
           <Property Name="Title" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Date" Type="date" />
-          <Property Name="Share" Type="varchar" MaxLength="500" />
+          <Property Name="Share" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Categories_id" Type="uniqueidentifier" />
           <Property Name="User_id" Type="varchar" MaxLength="50" />
         </EntityType>
@@ -68,7 +68,7 @@
           <Property Name="Password" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Blocked" Type="bit" Nullable="false" />
-          <Property Name="Active" Type="bit" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_Files_Categories">
           <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
@@ -180,7 +180,7 @@
           <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Date" Type="DateTime" Precision="0" />
-          <Property Name="Share" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Share" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Categories_id" Type="Guid" />
           <Property Name="User_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Category" Relationship="Self.FK_Files_Categories" FromRole="Files" ToRole="Categories" />
@@ -225,7 +225,7 @@
           <Property Name="Password" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Blocked" Type="Boolean" Nullable="false" />
-          <Property Name="Active" Type="Boolean" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Files" Relationship="Self.FK_Files_Users" FromRole="Users" ToRole="Files" />
           <NavigationProperty Name="Roles" Relationship="Self.UserRoles" FromRole="Users" ToRole="Roles" />
         </EntityType>
