@@ -151,17 +151,20 @@ namespace Programmesana_Sanija_Airita.Controllers
                 return View();
             }
         }
+        [HttpGet]
         public ActionResult UserProfile(User u)
         {
-            try
+            /*using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
             {
+                return View(dc.Users.Where(x => x.Username == username).FirstOrDefault());
+            }*/
+            try{
                 UsersRepository ir = new UsersRepository();
                 var myUser = ir.GetUsers().SingleOrDefault(x => x.Username == u.Username);
                 return View(myUser);
             }
             catch
             {
-                //TempData["error"] = "Value is not valid";
                 return RedirectToAction("List");
             }
         }
