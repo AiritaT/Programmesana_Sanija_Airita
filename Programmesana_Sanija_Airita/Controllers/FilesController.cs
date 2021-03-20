@@ -106,15 +106,15 @@ namespace Programmesana_Sanija_Airita.Controllers
                 file.InputStream.Read(readBytes, 0, 2);
                 file.InputStream.Position = 0;
 
-                if (
+                /*if (
                     (readBytes[0] == 80 & readBytes[1] == 75) || //zip
                     (readBytes[0] == 82 & readBytes[1] == 97) || //rar
                     (readBytes[0] == 137 & readBytes[1] == 80) || //png
                     (readBytes[0] == 105 & readBytes[1] == 115)//mp4
                     )
 
-                {
-                    if (file.ContentLength <= 2147483647)
+                {*/
+                    if (file.ContentLength <= 104857600)
                     {
                         //string Path = Server.MapPath("//FileStorage") + "//" + newFilename;
                         string name = Path.GetFileName(file.FileName);
@@ -129,8 +129,8 @@ namespace Programmesana_Sanija_Airita.Controllers
                     }
                     else
                         ViewBag.Error = "File should be smaller than 2 GB";
-                }
-                else ViewBag.Error = "File type not allowed";
+                /*}
+                else ViewBag.Error = "File type not allowed";*/
             }
             var fails = fr.GetFiles().SingleOrDefault(x => x.id == id);
             return View(fails);
@@ -198,7 +198,6 @@ namespace Programmesana_Sanija_Airita.Controllers
             db.Dispose();
             return Redirect("Files");
         }
-
         public ActionResult Delete(Guid id)
         {
             ProgrammesanaEntities1 db = new ProgrammesanaEntities1();
