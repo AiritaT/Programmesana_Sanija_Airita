@@ -4,11 +4,16 @@
     ViewBag.Title = "UserProfile";
 }
 
-<h2>UserProfile</h2>
+<div class="jumbotron jumbotron-fluid" style="background:rgb(255, 204, 0);">
+    <div class="container" style="text-align:center;">
+        <h1 class="display-4">Profile details</h1>
+    </div>
+</div>
 
-<div>
-    <h4>User</h4>
-    <hr />
+<div id="info">
+    <div style="float: right; margin-right: 30px; ">
+        <a href="/Users/EditProfile?id=@Model.Username"><img src="~/Style/Edit.png" style="height:30px; width: auto; margin:5px;" alt="Edit" /></a>
+    </div>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Username)
@@ -35,27 +40,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.Email)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Blocked)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Blocked)
         </dd>
 
         <dt>
@@ -67,8 +56,7 @@
         </dd>
 
     </dl>
+    <p>
+        @Html.ActionLink("Back to files", "Files")
+    </p>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
