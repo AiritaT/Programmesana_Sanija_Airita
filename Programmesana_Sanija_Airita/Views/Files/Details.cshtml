@@ -14,27 +14,38 @@
         <h3 style="text-align:center; padding-top:20px;">@Html.DisplayFor(model => model.Title)</h3>
         <hr />
 
+        @{
+            var uploadCount = 0;
+        }
+
         @foreach (var f in new Programmesana_Sanija_Airita.Controllers.DataAccess.FilesRepository().GetUploadForFiles(Model.id))
         {
+            uploadCount = Model.Uploads.Count;
+
             var cipher = f.Path;
 
-        <div class="text-center">
-            @if (cipher != null)
+            <div class="text-center">
+
+                @if (cipher != null)
                 {
 
-                    <iframe src='~/FileStorage/@cipher' width='700px' height='600px' frameborder='0'>@f.Path</iframe>
+                    <iframe src='~/Uploads/@cipher' width='700px' height='600px' frameborder='0'>@f.Path</iframe>
                     <br />
-                    <a href="/Files/Download?id=@cipher"><img src="~/Style/Download.png" style="height:30px; width: auto; margin:10px;" alt="Download" /></a>
+                    <a href="/File/Download?id=@cipher"><img src="~/Style/Download.png" style="height:30px; width: auto; margin:10px;" alt="Download" /></a>
+
                     <br />
 
-               }
-            else{
-
-                @Html.ActionLink("Upload", "Upload", new { id = Model.id })
-            }
-            <br>
-        </div>
+                }
+                <br>
+            </div>
         }
+
+        <div style="text-align:center; margin:80px">
+            @if (uploadCount == 0)
+            {
+                @Html.ActionLink("Upload file", "Upload", new { id = Model.id })
+            }
+        </div>
 
     </div>
     <div style="text-align:center;">
