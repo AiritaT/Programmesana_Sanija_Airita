@@ -176,7 +176,6 @@ namespace Programmesana_Sanija_Airita.Controllers
             using (ProgrammesanaEntities1 db = new ProgrammesanaEntities1())
             {
                 return View (db.Files.Where(x => x.id == id).FirstOrDefault());
-
             };
         }
         [HttpPost]
@@ -188,6 +187,7 @@ namespace Programmesana_Sanija_Airita.Controllers
                       var myFile = db.Files.Where(x => x.id == file.id).FirstOrDefault();
 
                     myFile.Title = file.Title;
+                    myFile.Description = file.Description;
                     myFile.Date = file.Date;
                     myFile.Share = file.Share;
                     myFile.Categories_id = file.Categories_id;

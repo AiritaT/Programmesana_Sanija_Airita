@@ -106,8 +106,9 @@ namespace Programmesana_Sanija_Airita.Controllers
             return View();
                  
             }
-       // [Authorize]
-       // [HttpPost]
+        // [Authorize]
+        // [HttpPost]
+        
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
@@ -121,16 +122,25 @@ namespace Programmesana_Sanija_Airita.Controllers
             var listOfUser = ur.GetUsers();
             return View(listOfUser);
         }
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
+       /* [HttpGet]
+        //
         public ActionResult Edit(string username)
         {
             using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
             {
                 return View(dc.Users.Where(x => x.Username == username).FirstOrDefault());
             }
+        }*/
+        [HttpGet]
+        public ActionResult EditProfile(string username)
+        {
+            using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
+            {
+                return View(dc.Users.Where(x => x.Username == username).FirstOrDefault());
+            }
         }
-        [HttpPost]
+      [Authorize(Roles = "Admin")]
+      [HttpPost]
         public ActionResult Edit(User u)
         {
             try
@@ -138,10 +148,9 @@ namespace Programmesana_Sanija_Airita.Controllers
                 using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
                {
                    var myUser = dc.Users.SingleOrDefault(x => x.Username == u.Username);
-
                     
-                   myUser.Blocked = u.Blocked;
-                   dc.SaveChanges();
+                    myUser.Blocked = u.Blocked;
+                    dc.SaveChanges();
 
                }
                 return RedirectToAction("List");
@@ -152,32 +161,39 @@ namespace Programmesana_Sanija_Airita.Controllers
             }
         }
         [HttpGet]
-        public ActionResult UserProfile(User u)
+       public ActionResult UserProfile()
         {
             /*using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
             {
                 return View(dc.Users.Where(x => x.Username == username).FirstOrDefault());
             }*/
-            try{
-                UsersRepository ir = new UsersRepository();
-                var myUser = ir.GetUsers().SingleOrDefault(x => x.Username == u.Username);
-                return View(myUser);
-            }
-            catch
-            {
-                return RedirectToAction("List");
-            }
+            /*try{
+                 UsersRepository ir = new UsersRepository();
+                 var myUser = ir.GetUsers().SingleOrDefault(x => x.Username == username);
+                 return View(myUser);
+             }
+             catch
+             {
+                 return RedirectToAction("List");
+             }*/
+            
+            UsersRepository ur = new UsersRepository();
+            var name = ur.GetUserByUsername(User.Identity.Name);
+            User myUser = ur.GetUsers().SingleOrDefault(user => user.Username == name.Username );
+            return View(myUser);
         }
-        public ActionResult EditProfile(string username)
+        [HttpGet]
+        public ActionResult EditUserProfile(string username)
         {
-            using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
-            {
-                return View(dc.Users.Where(x => x.Username == username).FirstOrDefault());
-            }
+            UsersRepository ur = new UsersRepository();
+            var name = ur.GetUserByUsername(User.Identity.Name);
+            User myUser = ur.GetUsers().SingleOrDefault(user => user.Username == name.Username);
+            return View(myUser);
         }
-        public ActionResult SaveProfile(User u)
+        [HttpPost]
+        public ActionResult SaveUserProfile(User u)
         {
-            ProgrammesanaEntities1 db = new ProgrammesanaEntities1();
+            /*ProgrammesanaEntities1 db = new ProgrammesanaEntities1();
             User user = db.Users.Where(x => x.Username == u.Username).FirstOrDefault();
 
             u.Name = u.Name;
@@ -185,9 +201,28 @@ namespace Programmesana_Sanija_Airita.Controllers
             u.Username = u.Username;
             u.Password = u.Password;
             db.SaveChanges();
-
             db.Dispose();
-            return Redirect("Users");
+            return Redirect("Users");*/
+
+            try
+            {
+                using (ProgrammesanaEntities1 dc = new ProgrammesanaEntities1())
+                {
+                    var myUser = dc.Users.SingleOrDefault(x => x.Username == u.Username);
+                    
+                    myUser.Name = u.Name;
+                    myUser.Surname = u.Surname;
+                    myUser.Username = u.Username;
+                    myUser.Password = u.Password;
+                    myUser.Email = u.Email;
+                    dc.SaveChanges();
+                }
+                return RedirectToAction("List");
+            }
+            catch
+            {
+                return View();
+            }
         }
         /*[HttpGet]
         public ActionResult Share(string username)
